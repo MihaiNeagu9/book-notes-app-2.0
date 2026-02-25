@@ -16,7 +16,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "dotenvx run -- node src/config/database.js"
+    "start": "dotenvx run -- node src/index.js"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.52.0",

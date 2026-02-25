@@ -1,5 +1,6 @@
 import pg from "pg";
 
+// Connection pool to PostgreSQL server
 const { Pool } = pg;
 const pool = new Pool({
   user: process.env.DB_USER,
@@ -9,6 +10,10 @@ const pool = new Pool({
   port: process.env.DB_PORT
 });
 
-const res = await pool.query("SELECT * FROM books");
-console.log(res.rows);
-await pool.end();
+// Error check
+pool.on("error", (err) => {
+  console.error("Unexpected error", err);
+  process.exit(-1);
+});
+
+export default pool;
