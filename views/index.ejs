@@ -1,51 +1,53 @@
-<%- include("partials/head", { title: "Book Notes" }) %>
-<%- include("partials/header", { sort }) %>
+<%
+  const currentSort = "recent";
+  const bookList = [];
+%>
 
-    <main class="container page">
+<%- include("partials/head") %>
+<%- include("partials/header") %>
 
-        <section class="page-top">
-            <h1 class="page-title">My Books</h1>
-            <p class="page-subtitle">Sorting: <strong><%= sort %></strong></p>
-        </section>
+<main class="container page">
+  <section class="page-top">
+    <h1 class="page-title">My Books</h1>
+    <p class="page-subtitle">Sorting: <strong><%= currentSort %></strong></p>
+  </section>
 
-        <section class="grid">
-            <% books.forEach((book) => { %>
-                <article class="card">
+  <% if (bookList.length === 0) { %>
+    <section class="empty-state">
+      <p class="muted">No books yet. Add your first book to start collecting notes.</p>
+    </section>
+  <% } else { %>
+    <section class="grid">
+      <% bookList.forEach((book) => { %>
+        <article class="card">
+          <div class="card-cover">
+            <img
+              src="<%= book.cover_id ? `https://covers.openlibrary.org/b/id/${book.cover_id}-M.jpg` : '/images/image.png' %>"
+              alt="<%= book.title || 'Book cover' %>"
+            >
+          </div>
 
-                    <div class="card-cover">
-                        <img 
-                            src="<%= book.cover_id 
-                            ? `https://covers.openlibrary.org/b/id/${book.cover_id}-M.jpg`
-                            : '/images/image.png' %>" 
-                            alt="Cover">  
-                    </div>
+          <div class="card-body">
+            <h2 class="card-title"><%= book.title || "Untitled" %></h2>
+            <p class="muted"><%= book.author || "Unknown author" %></p>
 
-                    <div class="card-body">
-                        <div class="card-top">
-                            <h2><%= book.title %></h2>
-                            <p><%= book.author %></p>
-                        </div>
+            <div class="meta">
+              <span class="pill">&#9733; <%= book.rating ?? "-" %> / 10</span>
+            </div>
 
-                        <div class="meta">
-                            <span class="pill">
-                                ⭐ <%= book.rating %> / 10
-                            </span>
-                        </div>
+            <p class="notes"><%= book.notes || "No notes yet." %></p>
 
-                        <p class="notes"><%= book.notes %></p>
-                        
-                        <div class="actions">
-                            <a class="btn ghost" href="/edit/<%= book.id %>">Edit</a>
-
-                            <form action="/delete/<%= book.id %>" method="POST">
-                                <button class="btn danger" onclick="return confirm('Are you sure you want to delete this book?')">Delete</button>
-                            </form>
-
-                        </div>
-                    </div>
-                </article>
-            <% }) %>
-        </section>
-    </main>
+            <div class="actions">
+              <a class="btn ghost" href="/edit/<%= book.id %>">Edit</a>
+              <form action="/delete/<%= book.id %>" method="POST">
+                <button class="btn danger" type="submit" onclick="return confirm('Are you sure you want to delete this book?')">Delete</button>
+              </form>
+            </div>
+          </div>
+        </article>
+      <% }) %>
+    </section>
+  <% } %>
+</main>
 
 <%- include("partials/footer") %>

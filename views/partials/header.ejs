@@ -2,15 +2,12 @@
 
             <div class="container header-row">
                 <div class="brand">
-                    <a href="/" class="brand-link">📚 Book Notes</a>
-                    <p class="tagline">Short notes + ratings, so you can remember your good ideas.</p>
+                    <a href="/" class="brand-link">Book Notes</a>
+                    <p class="tagline">Short notes</p>
                 </div>
                 
-
                 <nav class="nav">
-                    <a class="nav-link <%= sort === 'recent' ? 'active' : '' %>" href="/?sort=recent">Recent</a>
-                    <a class="nav-link <%= sort === 'rating' ? 'active' : '' %>" href="/?sort=rating">Rating</a>
-                    <a class="nav-link <%= sort === 'title' ? 'active' : '' %>" href="/?sort=title">Title</a>
+                    <a class="nav-link active %>" href="/?sort=recent">Recent</a>
                     <a class="nav-link primary" href="/new">+ Add book</a>
                 </nav>
             </div>
