@@ -17,7 +17,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "dotenvx run -- node src/server.js",
-    "dev": "dotenvx run -- nodemon src/server.js"
+    "dev": "dotenvx run -- nodemon src/server.js",
+    "migrate": "dotenvx run -- node src/config/migrate.js"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.52.0",
