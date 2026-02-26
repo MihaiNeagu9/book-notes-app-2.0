@@ -1,0 +1,37 @@
+<%- include("partials/head", { title: "Add book" }) %>
+<%- include("partials/header", { sort: "recent" }) %>
+
+        <main class="container page narrow">
+            <h1 class="page-title">Add a book</h1>
+
+            <form class="form" action="/add" method="POST">
+
+                <div class="field">
+                    <label for="title">Title *</label>
+                    <input id="title" name="title" required />
+                </div>
+
+                <div class="field">
+                    <label for="author">Author</label>
+                    <input id="author" name="author" />
+                </div>
+
+                <div class="field">
+                    <label for="rating">Rating (1–10)</label>
+                    <input id="rating" name="rating" type="number" min="1" max="10" />
+                </div>
+
+                <div class="field">
+                    <label for="notes">Notes</label>
+                    <textarea id="notes" name="notes" rows="6" placeholder="The key points, briefly..."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <a class="btn ghost" href="/">Cancel</a>
+                    <button class="btn" type="submit">Save</button>
+                </div>
+
+            </form>
+        </main>
+
+<%- include("partials/footer") %>
