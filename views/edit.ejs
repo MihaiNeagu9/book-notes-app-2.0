@@ -1,36 +1,46 @@
 <%- include("partials/head", { title: "Edit book" }) %>
-<%- include("partials/header", { sort: "recent" }) %>
+<%- include("partials/header", { sort, page: "books", currentUser }) %>
 
-        
-        <main class="container page narrow">
-            <h1 class="page-title">Edit the book</h1>
+<main class="container page narrow">
+  <h1 class="page-title">Edit the book</h1>
 
-            <form class="form" action="/update/<%= book.id %>" method="POST">
-                <div class="field">
-                    <label for="title">Title *</label>
-                    <input id="title" name="title" required value="<%= book.title %>" />
-                </div>
+  <% if (error) { %>
+    <section class="empty-state">
+      <p class="muted"><%= error %></p>
+    </section>
+  <% } %>
 
-                <div class="field">
-                    <label for="author">Author</label>
-                    <input id="author" name="author" value="<%= book.author ?? '' %>" />
-                </div>
+  <form class="form" action="/update/<%= book.id %>" method="POST">
+    <div class="field">
+      <label for="title">Title *</label>
+      <input id="title" name="title" required value="<%= book.title ?? '' %>">
+    </div>
 
-                <div class="field">
-                    <label for="rating">Rating (1–10)</label>
-                    <input id="rating" name="rating" type="number" min="1" max="10" value="<%= book.rating ?? '' %>" />
-                </div>
+    <div class="field">
+      <label for="author">Author</label>
+      <input id="author" name="author" value="<%= book.author ?? '' %>">
+    </div>
 
-                <div class="field">
-                    <label for="notes">Notes</label>
-                    <textarea id="notes" name="notes" rows="6"><%= book.notes ?? '' %></textarea>
-                </div>
+    <div class="field">
+      <label for="rating">Rating (1-10)</label>
+      <input id="rating" name="rating" type="number" min="1" max="10" value="<%= book.rating ?? '' %>">
+    </div>
 
-                <div class="form-actions">
-                    <a class="btn ghost" href="/">Back</a>
-                    <button class="btn" type="submit">Update</button>
-                </div>
-            </form>
-        </main>
+    <div class="field">
+      <label for="cover_id">OpenLibrary Cover ID</label>
+      <input id="cover_id" name="cover_id" value="<%= book.cover_id ?? '' %>">
+    </div>
+
+    <div class="field">
+      <label for="notes">Notes</label>
+      <textarea id="notes" name="notes" rows="6"><%= book.notes ?? '' %></textarea>
+    </div>
+
+    <div class="form-actions">
+      <a class="btn ghost" href="/">Back</a>
+      <button class="btn" type="submit">Update</button>
+    </div>
+  </form>
+</main>
 
 <%- include("partials/footer") %>

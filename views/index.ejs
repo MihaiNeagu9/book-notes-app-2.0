@@ -1,10 +1,9 @@
 <%
-  const currentSort = "recent";
-  const bookList = [];
+  const currentSort = typeof sort === "string" ? sort : "recent";
+  const bookList = Array.isArray(books) ? books : [];
 %>
-
-<%- include("partials/head") %>
-<%- include("partials/header") %>
+<%- include("partials/head", { title: "Book Notes" }) %>
+<%- include("partials/header", { sort: currentSort, page: "books", currentUser }) %>
 
 <main class="container page">
   <section class="page-top">
