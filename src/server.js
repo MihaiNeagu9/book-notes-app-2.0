@@ -21,6 +21,10 @@ app.get("/new", (req, res) => {
     res.render("new");
 });
 
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+
 app.listen(PORT, () => {
     console.log(`Book notes app listening on http://localhost:${PORT}`);
 });
