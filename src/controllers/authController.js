@@ -1,8 +1,61 @@
+import { getJWTSecretOrThrow, signAuthToken } from "../middleware/authMiddleware.js";
+import bcrypt from "bcrypt"; 
+import { findUserByEmail, createUser } from "../repositories/userRepository.js";
+
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  sameSite: "lax",
+  secure: process.env.NODE_ENV === "production",
+  maxAge: 7 * 24 * 60 * 60 * 1000
+};
+
 export function renderRegister(req, res) {
     return res.render("register", {
         error: null,
         form: { email: "" }
     });
+}
+
+export async function register(req, res) {
+    const name = String(req.body.name ?? "").trim();
+    const email = String(req.body.email ?? "").trim();
+    const password = String(req.body.password ?? ""); 
+
+    if (!name || !email || password.length < 6) {
+        return res.status(400).render("register", {
+            error: "Name, email and a password of at least 6 characters are required.",
+            form: { name, email }
+        });
+    }
+
+    try {
+        const existing = await findUserByEmail(email);
+        if (existing) {
+            return res.status(400).render("register", {
+                error: "This email is already in use.",
+                form: { name, email }
+            });
+        }
+
+        const password_hash = await bcrypt.hash(password, 10);
+        getJWTSecretOrThrow();
+        const user = await createUser({ name, email, password_hash });
+        const token = signAuthToken(user);
+
+        res.cookie("auth_token", token, COOKIE_OPTIONS);
+        return res.redirect("/");
+
+    } catch (error) {
+        if (error?.code === "23505") {
+            return res.status(400).render("register", {
+            error: "This email is already in use.",
+            form: { name, email }
+            });
+        }
+
+        console.error("Failed to register:", error.message);
+        return res.status(500).send("Failed to register.");
+    }
 }
 
 export function renderLogin(req, res) {
