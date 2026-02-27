@@ -64,3 +64,40 @@ export function renderLogin(req, res) {
         form: { email: "" }
     });
 }
+
+export async function login(req, res) {
+    const email = String(req.body.email ?? "").trim();
+    const password = String(req.body.password ?? "");
+
+    if (!email || !password) {
+        return res.status(400).render("login", {
+            error: "Email and password are required.",
+            form: { email }
+        });
+    }
+
+    try {
+        const user = await findUserByEmail(email);
+        if (!user) {
+        return res.status(401).render("login", {
+            error: "Invalid credentials.",
+            form: { email }
+        });
+        }
+
+        const ok = await bcrypt.compare(password, user.password_hash);
+        if (!ok) {
+        return res.status(401).render("login", {
+            error: "Invalid credentials.",
+            form: { email }
+        });
+        }
+
+        const token = signAuthToken(user);
+        res.cookie("auth_token", token, COOKIE_OPTIONS);
+        return res.redirect("/");
+    } catch (error) {
+        console.error("Failed to login:", error.message);
+        return res.status(500).send("Failed to login.");
+    }
+}
