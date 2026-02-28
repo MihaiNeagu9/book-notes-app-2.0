@@ -1,5 +1,5 @@
-import { getJWTSecretOrThrow, signAuthToken } from "../middleware/authMiddleware.js";
-import bcrypt from "bcrypt"; 
+import bcrypt from "bcrypt";
+import { getJWTSecretOrThrow, signAuthToken } from "../middlewares/auth.middleware.js";
 import { findUserByEmail, createUser } from "../repositories/userRepository.js";
 
 const COOKIE_OPTIONS = {
@@ -12,7 +12,7 @@ const COOKIE_OPTIONS = {
 export function renderRegister(req, res) {
     return res.render("register", {
         error: null,
-        form: { email: "" }
+        form: { name: "", email: "" }
     });
 }
 
