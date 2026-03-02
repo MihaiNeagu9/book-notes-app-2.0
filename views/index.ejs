@@ -3,8 +3,8 @@
   const bookList = [];
 %>
 
-<%- include("partials/head") %>
-<%- include("partials/header") %>
+<%- include("partials/head", { title: "" }) %>
+<%- include("partials/header", { currentUser: true, sort: currentSort }) %>
 
 <main class="container page">
   <section class="page-top">

@@ -1,5 +1,46 @@
 import jwt from "jsonwebtoken";
 
+const JWT_SECRET = process.env.JWT_SECRET;
+
+export function requireAuth(req, res, next) {
+  if (!req.user) {
+    return res.redirect("/login");
+  }
+
+  return next();
+}
+
+// Convert the raw Cookie header into an object
+function parseCookies(cookieHeader = "") {
+  return cookieHeader.split(";").reduce((acc, part) => {
+    const [rawKey, ...rest] = part.trim().split("=");
+    if (!rawKey) return acc;
+    acc[rawKey] = decodeURIComponent(rest.join("="));
+    return acc;
+  }, {});
+}
+
+// Identifies the current user based on the JWT cookie
+export function attachCurrentUser(req, res, next) {
+  const cookies = parseCookies(req.headers.cookie);
+  const token = cookies.auth_token;
+
+  if (!token) {
+    res.locals.currentUser = null;
+    return next();
+  }
+
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
+    req.user = { id: payload.sub, email: payload.email, name: payload.name };
+    res.locals.currentUser = req.user;
+  } catch {
+    res.locals.currentUser = null;
+  }
+
+  next();
+}
+
 export function getJWTSecretOrThrow() {
     const secret = process.env.JWT_SECRET?.trim();
     if (!secret) {

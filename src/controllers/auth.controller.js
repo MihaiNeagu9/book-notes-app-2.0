@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { signAuthToken } from "../middlewares/auth.middleware.js";
-import { findUserByEmail, createUser } from "../repositories/user.repository.js";
+import { findUserByEmail, createUser } from "../repositories/users.repository.js";
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
