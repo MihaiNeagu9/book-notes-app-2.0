@@ -9,3 +9,11 @@ export async function renderIndex(req, res) {
         return res.status(500).send("Failed to load books.");
     }
 }
+
+export function renderNew(req, res) {
+  return res.render("new", {
+    sort: "recent",
+    error: null,
+    form: { title: "", author: "", rating: "", notes: "", cover_id: "" }
+  });
+}

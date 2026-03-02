@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { renderIndex } from "../controllers/books.controller.js";
+import { renderIndex, renderNew } from "../controllers/books.controller.js";
 
 const router = Router();
 
 router.get("/", renderIndex);
+router.get("/new", renderNew);
 
 export default router;
