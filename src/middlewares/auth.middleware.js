@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
+// Protection middleware for private routes
 export function requireAuth(req, res, next) {
   if (!req.user) {
     return res.redirect("/login");
@@ -41,6 +42,7 @@ export function attachCurrentUser(req, res, next) {
   next();
 }
 
+// Validates the JWT configuration and returns the secret key
 export function getJWTSecretOrThrow() {
     const secret = process.env.JWT_SECRET?.trim();
     if (!secret) {
@@ -51,6 +53,7 @@ export function getJWTSecretOrThrow() {
     return secret;
 }
 
+// Creates the authentication JWT for the logged/registered user
 export function signAuthToken(user) {
     const JWT_SECRET = getJWTSecretOrThrow();
     return jwt.sign(

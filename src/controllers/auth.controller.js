@@ -100,3 +100,12 @@ export async function login(req, res) {
         return res.status(500).send("Failed to login.");
     }
 }
+
+export function logout(req, res) {
+  res.clearCookie("auth_token", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production"
+  });
+  return res.redirect("/login");
+}
