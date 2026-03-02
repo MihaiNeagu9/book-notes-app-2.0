@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
-import { getJWTSecretOrThrow, signAuthToken } from "../middlewares/auth.middleware.js";
-import { findUserByEmail, createUser } from "../repositories/userRepository.js";
+import { signAuthToken } from "../middlewares/auth.middleware.js";
+import { findUserByEmail, createUser } from "../repositories/user.repository.js";
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
@@ -38,7 +38,6 @@ export async function register(req, res) {
         }
 
         const password_hash = await bcrypt.hash(password, 10);
-        getJWTSecretOrThrow();
         const user = await createUser({ name, email, password_hash });
         const token = signAuthToken(user);
 
