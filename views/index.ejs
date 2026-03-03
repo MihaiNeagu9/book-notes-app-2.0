@@ -1,6 +1,6 @@
 <%
-  const currentSort = "recent";
-  const bookList = [];
+  const currentSort = sort;
+  const bookList = books;
 %>
 
 <%- include("partials/head", { title: "" }) %>
@@ -28,7 +28,7 @@
           </div>
 
           <div class="card-body">
-            <h2 class="card-title"><%= book.title || "Untitled" %></h2>
+            <h2 class="card-title"><%= book.title %></h2>
             <p class="muted"><%= book.author || "Unknown author" %></p>
 
             <div class="meta">
