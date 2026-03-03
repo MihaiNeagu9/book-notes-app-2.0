@@ -7,6 +7,8 @@ import {
 } from "../repositories/books.repository.js";
 import { fetchCoverId } from "../services/openLibrary.service.js";
 
+const ALLOWED_SORTS = new Set(["recent", "rating", "title"]);
+
 function sanitizeOptional(value) {
   const text = String(value ?? "").trim();
   return text.length > 0 ? text : null;
@@ -36,13 +38,16 @@ function validateAndNormalizeBookInput(body) {
 }
 
 export async function renderIndex(req, res) {
-    try {
-        const { books } = await findAllByUserId(req.user.id);
-        return res.render("index", { books, sort: "recent" });
-    } catch (error) {
-        console.error("Failed to load books:", error.message);
-        return res.status(500).send("Failed to load books.");
-    }
+  const requestedSort = String(req.query.sort || "recent").toLowerCase();
+  const sort = ALLOWED_SORTS.has(requestedSort) ? requestedSort : "recent";  
+
+  try {
+      const { books } = await findAllByUserId(req.user.id, sort);
+      return res.render("index", { books, sort });
+  } catch (error) {
+      console.error("Failed to load books:", error.message);
+      return res.status(500).send("Failed to load books.");
+  }
 }
 
 export function renderNew(req, res) {

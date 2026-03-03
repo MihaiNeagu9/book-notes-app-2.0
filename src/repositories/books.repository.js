@@ -1,10 +1,20 @@
 import pool from "../config/database.js";
 
-export async function findAllByUserId(userId) {
+const SORT_SQL = {
+  recent: "created_at DESC, id DESC",
+  rating: "rating DESC NULLS LAST, created_at DESC, id DESC",
+  title: "LOWER(title) ASC, created_at DESC, id DESC"
+};
+
+export async function findAllByUserId(userId, sort = "recent") {
+  const orderBy = SORT_SQL[sort] || SORT_SQL.recent;
+
   const result = await pool.query(`
         SELECT id, user_id, title, author, rating, notes, cover_id, created_at, updated_at
         FROM books
-        WHERE user_id = $1`, [userId]);
+        WHERE user_id = $1
+        ORDER BY ${orderBy}`, [userId]);
+        
   return { books: result.rows };
 }
 
@@ -47,6 +57,6 @@ export async function deleteBookByIdForUser(id, userId) {
     "DELETE FROM books WHERE id = $1 AND user_id = $2 RETURNING id",
     [id, userId]
   );
-  console.log(result.rows);
+
   return result.rows[0] ?? null;
 }
