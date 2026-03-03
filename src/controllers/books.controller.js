@@ -5,6 +5,7 @@ import {
   updateBookByIdForUser, 
   deleteBookByIdForUser 
 } from "../repositories/books.repository.js";
+import { fetchCoverId } from "../services/openLibrary.service.js";
 
 function sanitizeOptional(value) {
   const text = String(value ?? "").trim();
@@ -63,7 +64,10 @@ export async function createBook(req, res) {
   }
 
   try {
-    await createBookForUser(req.user.id, parsed.value);
+    const { title, author } = parsed.value;
+    const coverId = await fetchCoverId(title, author);
+
+    await createBookForUser(req.user.id, parsed.value, coverId);
     return res.redirect("/");
   } catch (error) {
     console.error("Failed to create book:", error.message);
@@ -96,7 +100,9 @@ export async function updateBook(req, res) {
   }
 
   try {
-    const updated = await updateBookByIdForUser(req.params.id, req.user.id, parsed.value);
+    const { title, author } = parsed.value;
+    const coverId = await fetchCoverId(title, author);
+    const updated = await updateBookByIdForUser(req.params.id, req.user.id, parsed.value, coverId);
     if (!updated) {
       return res.status(404).send("Book not found.");
     }

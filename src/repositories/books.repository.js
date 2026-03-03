@@ -8,12 +8,12 @@ export async function findAllByUserId(userId) {
   return { books: result.rows };
 }
 
-export async function createBookForUser(userId, input) {
+export async function createBookForUser(userId, input, coverId) {
   const result = await pool.query(
     `INSERT INTO books (user_id, title, author, rating, notes, cover_id)
      VALUES ($1, $2, $3, $4, $5, $6)
      RETURNING id`,
-    [userId, input.title, input.author, input.rating, input.notes, input.cover_id]
+    [userId, input.title, input.author, input.rating, input.notes, coverId]
   );
 
   return result.rows[0];
@@ -30,13 +30,13 @@ export async function findBookByIdForUser(id, userId) {
   return result.rows[0] ?? null;
 }
 
-export async function updateBookByIdForUser(id, userId, input) {
+export async function updateBookByIdForUser(id, userId, input, coverId) {
   const result = await pool.query(
     `UPDATE books
      SET title = $1, author = $2, rating = $3, notes = $4, cover_id = $5, updated_at = NOW()
      WHERE id = $6 AND user_id = $7
      RETURNING id`,
-    [input.title, input.author, input.rating, input.notes, input.cover_id, id, userId]
+    [input.title, input.author, input.rating, input.notes, coverId, id, userId]
   );
 
   return result.rows[0] ?? null;
