@@ -79,7 +79,7 @@ export async function login(req, res) {
         const user = await findUserByEmail(email);
         if (!user) {
         return res.status(401).render("login", {
-            error: "User not found.",
+            error: "Invalid credentials.",
             form: { email }
         });
         }
